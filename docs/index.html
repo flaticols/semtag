@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+
+    <title>semtag — Semantic Versioning for Git</title>
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1/dist/fonts/geist-sans/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1/dist/fonts/geist-mono/style.css">
+
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">semtag</a>
+                <nav>
+                    <a href="#install">Install</a>
+                    <a href="#usage">Usage</a>
+                    <a href="#features">Features</a>
+                    <a href="#examples">Examples</a>
+                    <a href="https://github.com/flaticols/semtag">GitHub</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-name">semtag</div>
+                <p class="hero-tagline">Semantic versioning for Git.</p>
+                <p class="hero-desc">Auto-detects the correct bump level from Go API changes. Supports multi-module workspaces. No framework dependencies.</p>
+            </div>
+        </section>
+
+        <section class="demo">
+            <div class="container">
+                <pre class="terminal"><code><span class="prompt">$</span> semtag
+<span class="ok">●</span> on default branch (main)
+<span class="ok">●</span> no uncommitted changes
+<span class="ok">●</span> no remote changes
+<span class="ok">●</span> no unpushed changes
+<span class="ok">●</span> no new remote tags
+<span class="ok">●</span> detected: 1 breaking, 2 compatible → major bump
+<span class="ok">●</span> bump tag v1.2.3 => v2.0.0
+<span class="ok">●</span> tag v2.0.0 created
+<span class="ok">●</span> tag v2.0.0 pushed</code></pre>
+            </div>
+        </section>
+
+        <section id="install" class="section">
+            <div class="container">
+                <h2>Install</h2>
+                <div class="install-grid">
+                    <div class="install-method">
+                        <h3>Go</h3>
+                        <pre class="code"><code>go install github.com/flaticols/semtag@latest</code></pre>
+                    </div>
+                    <div class="install-method">
+                        <h3>Binary</h3>
+                        <p><a href="https://github.com/flaticols/semtag/releases">GitHub Releases</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="usage" class="section">
+            <div class="container">
+                <h2>Usage</h2>
+                <div class="usage-grid">
+                    <div class="usage-row">
+                        <code>semtag</code>
+                        <span>Auto-detect bump level from API diff</span>
+                    </div>
+                    <div class="usage-row">
+                        <code>semtag patch</code>
+                        <span>Explicit patch bump &mdash; 1.2.3 &rarr; 1.2.4</span>
+                    </div>
+                    <div class="usage-row">
+                        <code>semtag major</code>
+                        <span>Major bump &mdash; 1.2.3 &rarr; 2.0.0</span>
+                    </div>
+                    <div class="usage-row">
+                        <code>semtag minor pkg/semver</code>
+                        <span>Multi-module bump &mdash; pkg/semver/v1.0.0 &rarr; pkg/semver/v1.1.0</span>
+                    </div>
+                    <div class="usage-row">
+                        <code>semtag --dry-run</code>
+                        <span>Preview without creating or pushing tags</span>
+                    </div>
+                    <div class="usage-row">
+                        <code>semtag undo</code>
+                        <span>Remove latest tag with interactive confirmation</span>
+                    </div>
+                    <div class="usage-row">
+                        <code>semtag diff v1.0.0</code>
+                        <span>Compare Go API surface against HEAD</span>
+                    </div>
+                    <div class="usage-row">
+                        <code>semtag --json patch</code>
+                        <span>Pure JSON output, no log messages</span>
+                    </div>
+                    <div class="usage-row">
+                        <code>semtag llm</code>
+                        <span>Print compact LLM-friendly help in XML format</span>
+                    </div>
+                </div>
+
+                <h3>Flags</h3>
+                <div class="flags">
+                    <div class="flag"><code>-n, --dry-run</code><span>Preview changes, skip tag creation</span></div>
+                    <div class="flag"><code>--json</code><span>Structured JSON only to stdout</span></div>
+                    <div class="flag"><code>--prefix</code><span>Tag prefix for multi-module repos</span></div>
+                    <div class="flag"><code>-r, --repo</code><span>Repository path</span></div>
+                    <div class="flag"><code>-l, --local</code><span>Skip remote operations</span></div>
+                    <div class="flag"><code>-b, --brave</code><span>Skip all checks and confirmations</span></div>
+                    <div class="flag"><code>--no-color</code><span>Disable colors</span></div>
+                    <div class="flag"><code>--no-tty</code><span>Disable interactive prompts</span></div>
+                    <div class="flag"><code>--verbose</code><span>Debug output</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="section">
+            <div class="container">
+                <h2>Features</h2>
+                <div class="features-grid">
+                    <div class="feature">
+                        <h3>Auto Bump Detection</h3>
+                        <p>Runs API diff against the last tag to determine if you need a major, minor, or patch bump. No arguments required.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Workspace Detection</h3>
+                        <p>Reads go.work, verifies go.mod in each module, and prompts you to select which module to bump.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>API Diff</h3>
+                        <p>Compares Go API surfaces between any two refs using temporary worktrees. Your working tree is never touched.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Dry Run</h3>
+                        <p>Preview what would happen without creating or pushing tags. Combine with --json for scripted workflows.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>JSON Output</h3>
+                        <p>Clean structured JSON to stdout. No log messages, no styled output — just data for pipes and scripts.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Pre-flight Checks</h3>
+                        <p>Validates branch, uncommitted changes, remote sync, and unfetched tags before any tag operation.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Multi-Module</h3>
+                        <p>Prefix tags like pkg/semver/v1.2.3 for Go monorepos. Specify via flag, positional arg, or let it auto-detect.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>TTY Aware</h3>
+                        <p>Detects terminal capabilities at startup. Colors, spinners, and prompts degrade gracefully to plain text.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>LLM Help</h3>
+                        <p><code>semtag llm</code> prints a compact XML summary of all commands, flags, JSON shapes, and behavior — designed for pasting into an AI context.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Minimal</h3>
+                        <p>No CLI framework: stdlib flag, slog, os/exec. No cobra, no viper. External deps: x/tools for API diff, flaticols/server for semver.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="examples" class="section">
+            <div class="container">
+                <h2>Examples</h2>
+
+                <div class="example">
+                    <h3>API Diff</h3>
+                    <pre class="terminal"><code><span class="prompt">$</span> semtag diff v0.0.6 v0.0.7
+<span class="ok">●</span> comparing API: v0.0.6 -> v0.0.7
+
+github.com/flaticols/semtag/semver
+  Incompatible changes:
+    - removed: ParseStrict
+  Compatible changes:
+    + added: ExpandPartialVersion
+    + added: ParseConstraintSet
+
+<span class="ok">●</span> summary: 1 breaking, 2 compatible
+<span class="ok">●</span> suggested bump: major</code></pre>
+                </div>
+
+                <div class="example">
+                    <h3>JSON Output</h3>
+                    <pre class="terminal"><code><span class="prompt">$</span> semtag --json --brave patch
+{"previous":"v1.2.3","version":"v1.2.4","pushed":true,"dry_run":false}</code></pre>
+                    <pre class="terminal"><code><span class="prompt">$</span> semtag --json --dry-run --brave
+{"previous":"v1.2.3","version":"v2.0.0","pushed":false,"dry_run":true}</code></pre>
+                </div>
+
+                <div class="example">
+                    <h3>Multi-Module Workspace</h3>
+                    <pre class="terminal"><code><span class="prompt">$</span> semtag minor pkg/semver
+<span class="ok">●</span> on default branch (main)
+<span class="ok">●</span> no uncommitted changes
+<span class="ok">●</span> no remote changes
+<span class="ok">●</span> bump tag pkg/semver/v1.0.0 => pkg/semver/v1.1.0
+<span class="ok">●</span> tag pkg/semver/v1.1.0 created
+<span class="ok">●</span> tag pkg/semver/v1.1.0 pushed</code></pre>
+                </div>
+
+                <div class="example">
+                    <h3>Dry Run</h3>
+                    <pre class="terminal"><code><span class="prompt">$</span> semtag --dry-run
+<span class="ok">●</span> on default branch (main)
+<span class="ok">●</span> no uncommitted changes
+<span class="ok">●</span> detected: 1 breaking → major bump
+<span class="ok">●</span> bump tag v1.2.3 => v2.0.0
+<span class="ok">●</span> dry-run: would create tag v2.0.0</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>semtag &copy; 2025 <a href="https://github.com/flaticols">Denis Panfilov</a> &middot; MIT License</p>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const t = document.querySelector(a.getAttribute('href'));
+                if (!t) return;
+                e.preventDefault();
+                scrollTo({ top: t.offsetTop - 56, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

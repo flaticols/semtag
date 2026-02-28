@@ -1,0 +1,212 @@
+:root {
+    --sans: 'Geist', system-ui, -apple-system, sans-serif;
+    --mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+    --bg:      #ffffff;
+    --fg:      #0a0a0a;
+    --fg2:     #333333;
+    --fg3:     #666666;
+    --border:  #d0d0d0;
+    --code-bg: #f0f0f0;
+    --green:   #15803d;
+    --max-w:   52rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg:      #0f0f0f;
+        --fg:      #f0f0f0;
+        --fg2:     #c0c0c0;
+        --fg3:     #787878;
+        --border:  #303030;
+        --code-bg: #1c1c1c;
+        --green:   #4ade80;
+    }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+body {
+    font-family: var(--sans);
+    font-size: 1rem;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.55;
+}
+
+.container { max-width: var(--max-w); margin: 0 auto; padding-inline: 1.25rem; }
+
+/* ---- Typography ---- */
+
+h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; color: var(--fg); }
+h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+
+p { color: var(--fg2); margin-bottom: 0.5rem; }
+
+a { color: var(--fg2); text-decoration: none; }
+a:hover { color: var(--fg); text-decoration: underline; }
+
+code { font-family: var(--mono); font-size: 0.875rem; }
+
+/* ---- Header ---- */
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 0;
+}
+
+.header-content { display: flex; align-items: center; justify-content: space-between; }
+
+.logo {
+    font-family: var(--mono);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--fg);
+}
+
+nav { display: flex; gap: 1.25rem; }
+nav a { font-size: 0.9rem; color: var(--fg3); }
+nav a:hover { color: var(--fg); text-decoration: none; }
+
+/* ---- Hero ---- */
+
+.hero {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.hero-name {
+    font-family: var(--mono);
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: 0.4rem;
+}
+
+.hero-tagline {
+    font-size: 1.0625rem;
+    color: var(--fg2);
+    margin-bottom: 0.25rem;
+}
+
+.hero-desc {
+    font-size: 0.9375rem;
+    color: var(--fg3);
+    max-width: 38rem;
+    margin: 0;
+}
+
+/* ---- Terminal ---- */
+
+.terminal {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.terminal code {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    display: block;
+    white-space: pre;
+    color: var(--fg);
+}
+
+.prompt { color: var(--fg3); }
+.ok     { color: var(--green); }
+
+/* ---- Demo ---- */
+
+.demo { padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
+
+/* ---- Sections ---- */
+
+.section { padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
+
+/* ---- Install ---- */
+
+.install-grid { display: flex; flex-direction: column; gap: 0.875rem; }
+.install-method h3 { font-size: 0.9375rem; margin-bottom: 0.35rem; }
+
+.code {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.875rem;
+    overflow-x: auto;
+}
+
+.code code { font-size: 0.875rem; white-space: pre; color: var(--fg); }
+
+/* ---- Usage ---- */
+
+.usage-grid { display: flex; flex-direction: column; margin-bottom: 1.5rem; }
+
+.usage-row {
+    display: grid;
+    grid-template-columns: 17rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.usage-row:first-child { border-top: 1px solid var(--border); }
+.usage-row code  { color: var(--fg); white-space: nowrap; }
+.usage-row span  { font-size: 0.9375rem; color: var(--fg2); }
+
+/* ---- Flags ---- */
+
+.flags { display: flex; flex-direction: column; }
+
+.flag {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.flag:first-child { border-top: 1px solid var(--border); }
+.flag code { color: var(--fg); white-space: nowrap; }
+.flag span { font-size: 0.9375rem; color: var(--fg2); }
+
+/* ---- Features ---- */
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem 2rem;
+}
+
+.feature h3 { font-size: 1rem; }
+.feature p  { font-size: 0.9375rem; line-height: 1.5; margin-bottom: 0; color: var(--fg2); }
+
+/* ---- Examples ---- */
+
+.example { margin-bottom: 1.5rem; }
+.example:last-child { margin-bottom: 0; }
+.example h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+
+/* ---- Footer ---- */
+
+footer { padding: 1.25rem 0; border-top: 1px solid var(--border); text-align: center; }
+footer p { font-size: 0.9rem; color: var(--fg3); margin: 0; }
+
+/* ---- Responsive ---- */
+
+@media (max-width: 640px) {
+    .header-content { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+    nav { gap: 0.75rem; }
+    .usage-row { grid-template-columns: 1fr; gap: 0.1rem; }
+    .flag  { grid-template-columns: 1fr; gap: 0.1rem; }
+    .features-grid { grid-template-columns: 1fr; gap: 1rem; }
+}
