@@ -1,5 +1,4 @@
 # semtag
-![bump-small](https://github.com/user-attachments/assets/fa47f507-24fd-4a7d-8972-6e77e11aa578)
 
 A command-line tool to easily bump the git tag version of your project using semantic versioning.
 
