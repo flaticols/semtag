@@ -1,0 +1,74 @@
+# semtag
+
+> CLI tool that bumps git tag versions using semantic versioning. Automatically detects the correct bump level (major/minor/patch) by comparing the Go exported API against the last tag. Supports Go multi-module workspaces and monorepo tag prefixes.
+
+Install: `go install github.com/flaticols/semtag@latest`
+
+Run `semtag llm` to get a compact XML reference of all commands, flags, JSON shapes, and behavior rules.
+
+## Commands
+
+- `semtag` — auto-detect bump level from Go API diff, then create and push tag
+- `semtag major` — bump major version: 1.2.3 → 2.0.0
+- `semtag minor` — bump minor version: 1.2.3 → 1.3.0
+- `semtag patch` — bump patch version: 1.2.3 → 1.2.4
+- `semtag [level] [package]` — bump a monorepo package, e.g. `semtag minor pkg/x`
+- `semtag undo` — remove latest semver tag locally and from remote
+- `semtag diff <old-ref> [new-ref]` — compare Go API surface between two refs; new-ref defaults to HEAD
+- `semtag version` — print installed version
+- `semtag llm` — print compact LLM-friendly XML help
+
+## Flags
+
+- `-n, --dry-run` — preview without creating or pushing tags
+- `--json` — structured JSON to stdout only; suppresses all log output
+- `--prefix STRING` — tag prefix for monorepo (e.g. `pkg/x` → tags like `pkg/x/v1.2.3`)
+- `-r, --repo PATH` — path to git repository (default: current directory)
+- `-l, --local` — skip all remote operations (no fetch, no push)
+- `-b, --brave` — skip all checks and confirmations; continue past errors
+- `--no-color` — disable colored terminal output
+- `--no-tty` — disable interactive prompts
+- `--verbose` — enable debug-level log output
+
+## Behavior
+
+Auto-detect logic: semtag compares the Go exported API between the last tag and HEAD using temporary worktrees (working tree is never modified). Breaking changes → major; new exports → minor; no changes → patch.
+
+Pre-flight checks (run before every bump): current branch must be in the default list; no uncommitted changes; no remote changes ahead of HEAD; no unpushed local commits; unfetched remote tags are fetched automatically.
+
+Default branches: `latest`, `main`, `master`, `develop`. Bumping from any other branch is blocked unless `--brave` is set.
+
+Tag format: `vX.Y.Z` for the root module; `prefix/vX.Y.Z` for monorepo packages.
+
+Go workspace: if a `go.work` file is present and no `--prefix` is given, semtag reads the workspace modules and prompts the user to select one.
+
+## JSON Output
+
+All commands support `--json`. Output goes to stdout; all log messages are suppressed.
+
+Bump: `{"version":"v1.2.4","previous":"v1.2.3","pushed":true,"dry_run":false}`
+Undo: `{"removed":"v1.2.4"}`
+Error: `{"error":"<message>"}`
+
+The `previous` key is omitted when there are no existing tags (first tag).
+
+## Examples
+
+```
+semtag                            # auto-detect and bump
+semtag patch                      # explicit patch bump
+semtag major pkg/x                # major bump for monorepo prefix pkg/x
+semtag --dry-run                  # preview only, no tags created or pushed
+semtag --json --brave patch       # machine-readable, skip all prompts
+semtag --local patch              # bump without pushing to remote
+semtag undo --brave               # remove latest tag without confirmation
+semtag diff v1.0.0                # show API changes from v1.0.0 to HEAD
+semtag diff v1.0.0 v1.1.0        # show API changes between two specific refs
+semtag --repo /path/to/repo patch # operate on a repo in a different directory
+```
+
+## Optional
+
+- [Landing page](https://semtag.dev/)
+- [Source code](https://github.com/flaticols/semtag)
+- [Releases](https://github.com/flaticols/semtag/releases)
