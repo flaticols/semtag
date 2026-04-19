@@ -11,7 +11,7 @@ import (
 	"github.com/flaticols/semtag/internal/tui"
 )
 
-func runUndo(cfg *Config, repo *git.Repo) error {
+func runUndo(cfg *Config, repo git.Backend) error {
 	ver, err := repo.LatestTag(cfg.Prefix)
 	if err != nil {
 		var tagErr git.SemVerTagError

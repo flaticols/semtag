@@ -9,7 +9,7 @@ import (
 	"github.com/flaticols/semtag/internal/git"
 )
 
-func runDiff(cfg *Config, repo *git.Repo, args []string) error {
+func runDiff(cfg *Config, repo git.Backend, args []string) error {
 	if len(args) < 1 {
 		return fmt.Errorf("usage: semtag diff <old-ref> [new-ref]\n  old-ref: git tag, branch, or commit\n  new-ref: git tag, branch, or commit (default: HEAD)")
 	}

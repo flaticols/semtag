@@ -67,7 +67,7 @@ func (r *Report) SuggestedBump() string {
 // Compare compares the public Go API between oldRef and newRef.
 // Both refs are checked out in temporary worktrees; the current working tree is untouched.
 // If newRef is empty, HEAD (current state) is used via a worktree of HEAD.
-func Compare(repo *git.Repo, oldRef, newRef string) (*Report, error) {
+func Compare(repo git.Backend, oldRef, newRef string) (*Report, error) {
 	oldWT := repo.Wt().Add(oldRef)
 	if err := oldWT.Err(); err != nil {
 		return nil, fmt.Errorf("worktree for %s: %w", oldRef, err)

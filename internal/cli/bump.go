@@ -26,7 +26,7 @@ const (
 
 var defaultBranches = []string{"latest", "main", "master", "develop"}
 
-func runBump(cfg *Config, repo *git.Repo, args []string) error {
+func runBump(cfg *Config, repo git.Backend, args []string) error {
 	incPart := getIncPart(args)
 	cfg.Prefix = normalizePrefix(getPackageName(args), cfg.Prefix)
 
@@ -88,7 +88,7 @@ func runBump(cfg *Config, repo *git.Repo, args []string) error {
 	return emitJSON(cfg, oldTag, newTag, pushed)
 }
 
-func detectWorkspacePrefix(cfg *Config, repo *git.Repo) error {
+func detectWorkspacePrefix(cfg *Config, repo git.Backend) error {
 	modules, err := gomod.Modules(repo.Path())
 	if err != nil || len(modules) == 0 {
 		return err
@@ -108,7 +108,7 @@ func detectWorkspacePrefix(cfg *Config, repo *git.Repo) error {
 	return nil
 }
 
-func detectBumpLevel(cfg *Config, repo *git.Repo, ver semver.Version, noTags bool) semVerPart {
+func detectBumpLevel(cfg *Config, repo git.Backend, ver semver.Version, noTags bool) semVerPart {
 	if noTags {
 		return patch
 	}
@@ -138,7 +138,7 @@ func emitJSON(cfg *Config, oldTag, newTag string, pushed bool) error {
 	return json.NewEncoder(os.Stdout).Encode(result)
 }
 
-func currentVersion(cfg *Config, repo *git.Repo) (semver.Version, bool, error) {
+func currentVersion(cfg *Config, repo git.Backend) (semver.Version, bool, error) {
 	ver, err := repo.LatestTag(cfg.Prefix)
 	if err != nil {
 		var tagErr git.SemVerTagError
@@ -155,7 +155,7 @@ func currentVersion(cfg *Config, repo *git.Repo) (semver.Version, bool, error) {
 	return ver, false, nil
 }
 
-func gitStateChecks(cfg *Config, repo *git.Repo) error {
+func gitStateChecks(cfg *Config, repo git.Backend) error {
 	branch, err := repo.CurrentBranch()
 	if err != nil {
 		return handleErr(cfg, err)
@@ -220,7 +220,7 @@ func checkBool(cfg *Config, check func() (bool, error), failMsg, okMsg string) e
 	return nil
 }
 
-func handleRemoteTags(cfg *Config, repo *git.Repo) error {
+func handleRemoteTags(cfg *Config, repo git.Backend) error {
 	yes, err := repo.HasUnfetchedTags()
 	if err != nil {
 		slog.Warn(err.Error())
