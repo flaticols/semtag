@@ -9,12 +9,15 @@
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
     in {
       packages = forAllSystems (pkgs: {
-        default = pkgs.buildGoModule {
+        # Pre-built binary from the latest release (auto-updated by GoReleaser).
+        default = pkgs.callPackage ./nix/semtag.nix {};
+
+        # Build from source — useful for development or patching.
+        source = pkgs.buildGoModule {
           pname = "semtag";
           version = "0.0.1";
           src = ./.;
           go = pkgs.go;
-          # vendor/ directory is included in the source tree
           vendorHash = null;
           doCheck = false;
           meta = with pkgs.lib; {

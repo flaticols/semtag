@@ -1,0 +1,63 @@
+version: 2
+
+project_name: semtag
+
+builds:
+  - id: semtag
+    main: .
+    binary: semtag
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - id: semtag
+    ids: [semtag]
+    formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+
+checksum:
+  name_template: checksums.txt
+
+nix:
+  - name: semtag
+    ids: [semtag]
+    repository:
+      owner: flaticols
+      name: semtag
+      branch: latest
+    commit_author:
+      name: Denis Panfilov
+      email: gh@flaticols.dev
+    commit_msg_template: "nix: update semtag to {{ .Tag }}"
+    homepage: "https://github.com/flaticols/semtag"
+    description: "Semantic versioning CLI for Git and Jujutsu"
+    license: "mit"
+    directory: nix
+
+release:
+  github:
+    owner: flaticols
+    name: semtag
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
