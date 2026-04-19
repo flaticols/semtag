@@ -9,11 +9,8 @@
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
     in {
       packages = forAllSystems (pkgs: {
-        # Pre-built binary from the latest release (auto-updated by GoReleaser).
-        default = pkgs.callPackage ./nix/semtag.nix {};
-
-        # Build from source — useful for development or patching.
-        source = pkgs.buildGoModule {
+        # Build from source (default until a GitHub release is published).
+        default = pkgs.buildGoModule {
           pname = "semtag";
           version = "0.0.1";
           src = ./.;
@@ -28,6 +25,9 @@
             platforms = platforms.darwin;
           };
         };
+
+        # Pre-built binary from the latest release (auto-updated by GoReleaser).
+        release = pkgs.callPackage ./nix/semtag.nix {};
       });
 
       devShells = forAllSystems (pkgs: {
