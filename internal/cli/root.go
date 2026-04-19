@@ -185,7 +185,7 @@ Examples:
   semtag diff v1.0.0 v1.1.0       Compare Go API between two refs
   semtag diff v1.0.0               Compare v1.0.0 against HEAD
   semtag --json                    Output results as JSON only
-  semtag --vcs jj patch               Use jujutsu VCS explicitly
-  semtag --jj                         Shorthand for --vcs jj
+  semtag --vcs jj patch              Use jujutsu VCS explicitly
+  semtag --jj                        Shorthand for --vcs jj
 `)
 }
