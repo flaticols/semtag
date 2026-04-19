@@ -393,3 +393,19 @@ func TestNewForVCSJJ(t *testing.T) {
 	_, ok := b.(*JJRepo)
 	require.True(t, ok, "expected *JJRepo for vcs=jj")
 }
+
+// TestNewForVCSAuto tests NewForVCS with vcs="auto".
+func TestNewForVCSAuto(t *testing.T) {
+	dir := t.TempDir()
+
+	// Without .jj: should return *Repo
+	b := NewForVCS(dir, "auto")
+	_, ok := b.(*Repo)
+	require.True(t, ok, "expected *Repo when .jj absent")
+
+	// With .jj: should return *JJRepo
+	require.NoError(t, os.Mkdir(filepath.Join(dir, ".jj"), 0o755))
+	b = NewForVCS(dir, "auto")
+	_, ok = b.(*JJRepo)
+	require.True(t, ok, "expected *JJRepo when .jj present")
+}
