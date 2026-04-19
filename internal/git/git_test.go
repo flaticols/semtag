@@ -327,3 +327,33 @@ func TestIsDefaultBranch(t *testing.T) {
 		})
 	}
 }
+
+// TestJJRepoCurrentBranch tests JJRepo.CurrentBranch with a single bookmark.
+func TestJJRepoCurrentBranch(t *testing.T) {
+	mock := NewMockCommandRunner()
+	mock.SetOutput("jj log", []byte("latest\n"), nil)
+	repo := &JJRepo{Repo: NewWithRunner("", mock)}
+	branch, err := repo.CurrentBranch()
+	require.NoError(t, err)
+	require.Equal(t, "latest", branch)
+}
+
+// TestJJRepoCurrentBranchAnonymous tests JJRepo.CurrentBranch with no bookmarks.
+func TestJJRepoCurrentBranchAnonymous(t *testing.T) {
+	mock := NewMockCommandRunner()
+	mock.SetOutput("jj log", []byte(""), nil)
+	repo := &JJRepo{Repo: NewWithRunner("", mock)}
+	branch, err := repo.CurrentBranch()
+	require.NoError(t, err)
+	require.Equal(t, "", branch)
+}
+
+// TestJJRepoCurrentBranchMultiple tests JJRepo.CurrentBranch with multiple bookmarks.
+func TestJJRepoCurrentBranchMultiple(t *testing.T) {
+	mock := NewMockCommandRunner()
+	mock.SetOutput("jj log", []byte("main\nlatest\n"), nil)
+	repo := &JJRepo{Repo: NewWithRunner("", mock)}
+	branch, err := repo.CurrentBranch()
+	require.NoError(t, err)
+	require.Equal(t, "main", branch)
+}
