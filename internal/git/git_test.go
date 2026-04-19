@@ -2,7 +2,9 @@ package git
 
 import (
 	"errors"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"slices"
 	"strings"
 	"testing"
@@ -367,4 +369,27 @@ func TestJJRepoCurrentBranchError(t *testing.T) {
 	_, err := repo.CurrentBranch()
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "jj current bookmark")
+}
+
+// TestDetect tests the Detect function for .jj directory detection.
+func TestDetect(t *testing.T) {
+	dir := t.TempDir()
+	require.False(t, Detect(dir), "should return false when .jj is absent")
+
+	require.NoError(t, os.Mkdir(filepath.Join(dir, ".jj"), 0o755))
+	require.True(t, Detect(dir), "should return true when .jj is present")
+}
+
+// TestNewForVCSGit tests NewForVCS with vcs="git".
+func TestNewForVCSGit(t *testing.T) {
+	b := NewForVCS("", "git")
+	_, ok := b.(*Repo)
+	require.True(t, ok, "expected *Repo for vcs=git")
+}
+
+// TestNewForVCSJJ tests NewForVCS with vcs="jj".
+func TestNewForVCSJJ(t *testing.T) {
+	b := NewForVCS("", "jj")
+	_, ok := b.(*JJRepo)
+	require.True(t, ok, "expected *JJRepo for vcs=jj")
 }
