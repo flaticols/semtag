@@ -289,7 +289,7 @@ func (r *Repo) LatestTag(prefix string) (semver.Version, error) {
 
 // CreateTag creates a local git tag.
 func (r *Repo) CreateTag(tag string) error {
-	out, err := r.runCombined("tag", tag)
+	out, err := r.runCombined("tag", "-a", "-m", tag, tag)
 	if err != nil {
 		return fmt.Errorf("create tag: %s: %w", strings.TrimSpace(out), err)
 	}
