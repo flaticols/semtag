@@ -334,7 +334,7 @@ func TestIsDefaultBranch(t *testing.T) {
 // TestJJRepoCurrentBranch tests JJRepo.CurrentBranch with a single bookmark.
 func TestJJRepoCurrentBranch(t *testing.T) {
 	mock := NewMockCommandRunner()
-	mock.SetOutput("jj log -r @ --no-graph", []byte("latest\n"), nil)
+	mock.SetOutput(`jj log -r @ --no-graph -T bookmarks.map(|b| b.name()).join("\n")`, []byte("latest\n"), nil)
 	repo := &JJRepo{Repo: NewWithRunner("", mock)}
 	branch, err := repo.CurrentBranch()
 	require.NoError(t, err)
@@ -344,7 +344,7 @@ func TestJJRepoCurrentBranch(t *testing.T) {
 // TestJJRepoCurrentBranchAnonymous tests JJRepo.CurrentBranch with no bookmarks.
 func TestJJRepoCurrentBranchAnonymous(t *testing.T) {
 	mock := NewMockCommandRunner()
-	mock.SetOutput("jj log -r @ --no-graph", []byte(""), nil)
+	mock.SetOutput(`jj log -r @ --no-graph -T bookmarks.map(|b| b.name()).join("\n")`, []byte(""), nil)
 	repo := &JJRepo{Repo: NewWithRunner("", mock)}
 	branch, err := repo.CurrentBranch()
 	require.NoError(t, err)
@@ -354,7 +354,7 @@ func TestJJRepoCurrentBranchAnonymous(t *testing.T) {
 // TestJJRepoCurrentBranchMultiple tests JJRepo.CurrentBranch with multiple bookmarks.
 func TestJJRepoCurrentBranchMultiple(t *testing.T) {
 	mock := NewMockCommandRunner()
-	mock.SetOutput("jj log -r @ --no-graph", []byte("main\nlatest\n"), nil)
+	mock.SetOutput(`jj log -r @ --no-graph -T bookmarks.map(|b| b.name()).join("\n")`, []byte("main\nlatest\n"), nil)
 	repo := &JJRepo{Repo: NewWithRunner("", mock)}
 	branch, err := repo.CurrentBranch()
 	require.NoError(t, err)
@@ -364,7 +364,7 @@ func TestJJRepoCurrentBranchMultiple(t *testing.T) {
 // TestJJRepoCurrentBranchError tests JJRepo.CurrentBranch error path.
 func TestJJRepoCurrentBranchError(t *testing.T) {
 	mock := NewMockCommandRunner()
-	mock.SetOutput("jj log -r @ --no-graph", nil, errors.New("jj not found"))
+	mock.SetOutput(`jj log -r @ --no-graph -T bookmarks.map(|b| b.name()).join("\n")`, nil, errors.New("jj not found"))
 	repo := &JJRepo{Repo: NewWithRunner("", mock)}
 	_, err := repo.CurrentBranch()
 	require.Error(t, err)
