@@ -26,6 +26,7 @@ type Config struct {
 	NoTTY   bool
 	JSON    bool
 	DryRun  bool
+	VCS     string // "auto" | "git" | "jj"
 
 	// Derived
 	Interactive bool
@@ -43,7 +44,7 @@ func Run() {
 	if repoPath == "" {
 		repoPath = "."
 	}
-	repo := git.New(repoPath)
+	repo := git.NewForVCS(repoPath, cfg.VCS)
 
 	args := flag.Args()
 	cmd := ""
@@ -103,9 +104,16 @@ func parseFlags() *Config {
 	flag.BoolVar(&cfg.JSON, "json", false, "output JSON to stdout")
 	flag.BoolVar(&cfg.DryRun, "dry-run", false, "show what would happen without creating or pushing tags")
 	flag.BoolVar(&cfg.DryRun, "n", false, "show what would happen (shorthand)")
+	var jjMode bool
+	flag.StringVar(&cfg.VCS, "vcs", "auto", "VCS backend: auto, git, jj")
+	flag.BoolVar(&jjMode, "jj", false, "use jujutsu VCS (shorthand for --vcs jj)")
 
 	flag.Usage = printUsage
 	flag.Parse()
+
+	if jjMode {
+		cfg.VCS = "jj"
+	}
 
 	cfg.Term = iterm.Detect(int(os.Stderr.Fd()))
 
@@ -143,7 +151,7 @@ func printVersion() {
 }
 
 func printUsage() {
-	fmt.Fprint(os.Stderr, `semtag - Semantic versioning for Git
+	fmt.Fprint(os.Stderr, `semtag - Semantic versioning for Git and Jujutsu
 
 Usage:
   semtag [flags] [major|minor|patch] [package]
@@ -177,5 +185,7 @@ Examples:
   semtag diff v1.0.0 v1.1.0       Compare Go API between two refs
   semtag diff v1.0.0               Compare v1.0.0 against HEAD
   semtag --json                    Output results as JSON only
+  semtag --vcs jj patch               Use jujutsu VCS explicitly
+  semtag --jj                         Shorthand for --vcs jj
 `)
 }
